@@ -4,7 +4,7 @@
 ---
 
 1. [交流充电](https://wingmeng.github.io/charginAnimate/demo-AC.html)
-1. [直流充电](https://wingmeng.github.io/charginAnimate/demo-AC.html)
+1. [直流充电](https://wingmeng.github.io/charginAnimate/demo-DC.html)
 
 ![](Explain_AC_state1.png)
 
