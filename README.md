@@ -3,8 +3,8 @@
     @Update: 2017-07-12
 ---
 
-1. [交流充电](https://wingmeng.github.io/chargingAnimate/demo_AC.html)
-1. [直流充电](https://wingmeng.github.io/chargingAnimate/demo_DC.html)
+1. [交流充电](https://wingmeng.github.io/charging-animate/demo_AC.html)
+1. [直流充电](https://wingmeng.github.io/charging-animate/demo_DC.html)
 
 ![](Explain_AC_state1.png)
 
