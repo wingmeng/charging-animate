@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>交流充电界面效果演示</title>
+	<style>
+	.wrap {width:750px; padding:20px 0; margin:30px auto 0; background:#37b111;}
+	.base, .outer-ring, .inner-ring {margin:0 auto; background:transparent url(about:blank) center no-repeat;}
+	.charging-box {position:relative; overflow:hidden; background:#29a40c;}
+		.base {position:relative; width:750px; height:486px; background-image:url(images/demo_mask_@2x.png);}
+		.prog-text,
+		.inner-ring {position:absolute; top:50%; left:50%; width:368px; height:368px; margin-top:-184px; margin-left:-184px;}
+		.prog-text {margin-top:-72px; text-align:center; color:#fff;}
+			.prog-text-pct {font:130px/1 normal consolas, tahoma; text-shadow:0 2px 3px rgba(0,0,0,.3);}
+			.prog-text-pct:after {content:'%'; font-size:40px;}
+			.prog-text-desc {display:block; width:190px; margin:0 auto; line-height:46px; text-align:center; font-size:22px; font-family:'microsoft yahei'; color:#b7ffa0; background-color:rgba(0,0,0,.2); border-radius:25px;}
+		.prog-animate {position:absolute; bottom:0; width:745px; height:57%; overflow:hidden; background:transparent url(images/ani_Charging-box_progress_@2x.png) center top no-repeat; transition:height ease-in-out .3s;}
+		.prog-animate:before,
+		.prog-animate:after {position:absolute; content:''; width:100%; height:100%; margin-top:20px;}
+		.outer-ring {height:100%; background-image:url(images/bg_Charging-box_outer-ring_@2x.png);}
+		.inner-ring {background-image:url(images/ani_Charging-box_inner-ring_@2x.png);}
+	.tool {text-align:center; font-size:14px;}
+	.tool > input {display:block; width:300px; padding:.75em 0; margin:20px auto; cursor:pointer; font-size:100%; color:#333;}
+	a {color:#06c; text-decoration:none;}
+	a:hover {text-decoration:underline;}
+
+	.is-complete .prog-animate {background:#0a7c05;}
+	.is-charging .prog-animate {
+		-webkit-animation:MoveRight 5s linear infinite;
+				animation:MoveRight 5s linear infinite;
+	}
+	.is-charging .prog-animate:before {
+		background-image:url(images/ani_Charging-box_bubble_style1_@2x.png);
+		-webkit-animation:MoveTop 14s linear infinite;
+				animation:MoveTop 14s linear infinite;
+	}
+	.is-charging .prog-animate:after {
+		background-image:url(images/ani_Charging-box_bubble_style2_@2x.png);
+		-webkit-animation:MoveTop 8s linear infinite;
+				animation:MoveTop 8s linear infinite;
+	}
+	.is-charging .outer-ring {background-image:url(images/ani_Charging-box_outer-ring_@2x.png);
+		-webkit-animation:Rotate_clockwise 6s linear infinite;
+				animation:Rotate_clockwise 6s linear infinite;
+	}
+	.is-charging .inner-ring {
+		-webkit-animation:Rotate_anticlockwise 11s linear infinite;
+	 			animation:Rotate_anticlockwise 11s linear infinite;
+	}
+
+	/* 从左到右的水波 */
+	@-webkit-keyframes MoveRight {
+		0% {background-position:0 0;}
+		100% {background-position:147px 0;}
+	}
+
+	/* 从下到上的气泡 */
+	@-webkit-keyframes MoveTop {
+		0% {background-position:0 0;}
+		100% {background-position:0 -252px;}
+	}
+	@keyframes MoveTop {
+		0% {background-position:0 0;}
+		100% {background-position:0 -252px;}
+	}
+
+	/* 顺时针 */
+	@-webkit-keyframes Rotate_clockwise {
+		0% {-webkit-transform: rotateZ(0deg); transform:rotateZ(0deg);}
+		100% {-webkit-transform: rotateZ(360deg); transform:rotateZ(360deg);}
+	}
+	@keyframes Rotate_clockwise {
+		0% {transform:rotateZ(0deg);}
+		100% {transform:rotateZ(360deg);}
+	}
+
+	/* 逆时针 */
+	@-webkit-keyframes Rotate_anticlockwise {
+		0% {-webkit-transform: rotateZ(0deg); transform:rotateZ(0deg);}
+		100% {-webkit-transform: rotateZ(-360deg); transform:rotateZ(-360deg);}
+	}
+	@keyframes Rotate_anticlockwise {
+		0% {transform:rotateZ(0deg);}
+		100% {transform:rotateZ(-360deg);}
+	}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<div class="charging-box" id="chargingBox">
+			<div class="progress">
+				<div class="prog-animate" id="progAnimate"></div>
+				<div class="prog-text">
+					<b class="prog-text-pct" id="progPct">57</b>
+					<span class="prog-text-desc">当前电量</span>
+				</div>				
+			</div>
+			<div class="base">
+				<div class="outer-ring"></div>
+				<div class="inner-ring"></div>
+			</div>
+		</div>
+	</div>	
+	<div class="tool">
+		<input type="button" value="开始充电" onclick="onSwitch(this)">
+		<a href="demo_AC.html">去看看：交流充电界面效果演示 &gt;</a>
+	</div>
+	<script>
+	try {
+		if ('transform' in document.documentElement.style || '-webkit-transform' in document.documentElement.style) {
+
+		} else {
+			document.body.innerHTML = '抱歉，不支持当前浏览器！';
+		}
+	} catch(e) {
+		document.body.innerHTML = e + '，抱歉，不支持当前浏览器！';
+	}
+
+	var num = 57, timer = null, timerSec = 0;
+	var box = document.getElementById('chargingBox');
+	function onSwitch(obj) {
+		if (box.classList.contains('is-complete')) {
+			alert('已经充满了！请君刷新页面再来过');
+		} else  {
+			if (obj.value == '开始充电') {
+				box.classList.add('is-charging');
+				onCharging();
+				obj.value = '停止充电';
+			} else {
+				box.classList.remove('is-charging');
+				clearTimeout(timer);
+				obj.value = '开始充电';
+			}
+		}
+	}
+
+	function onCharging() {
+		var progAni = document.getElementById('progAnimate'),
+			progPct = document.getElementById('progPct');
+		timer = setTimeout(function() {
+			timerSec = getRandomNum(200, 3000);
+			if (num >= 100) {
+				clearTimeout(timer);
+				box.classList.remove('is-charging');
+				box.classList.add('is-complete');
+			} else {
+				num = num + 1;
+				progAni.style.height = num + '%';
+				progPct.innerHTML = num;
+				onCharging();
+			}
+		}, timerSec);
+	}
+
+	function getRandomNum(min, max) {
+		var range = max - min;
+		return (min + Math.round(Math.random() * range));
+	}
+	</script>
+</body>
+</html>
